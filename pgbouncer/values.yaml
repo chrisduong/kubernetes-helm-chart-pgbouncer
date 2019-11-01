@@ -44,3 +44,6 @@ customSettings: {}
 global:
   # optionally use namespace as dbname
   namespacedDatabases: false
+
+service:
+  type: ClusterIP
