@@ -4,12 +4,10 @@ metadata:
   name: {{ template "pgbouncer.fullname" . }}
   labels:
     {{ template "pgbouncer.appLabel" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-    {{- if .Values.labels }}
-    {{- toYaml .Values.labels | nindent 4}}
-    {{- end }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    heritage: "{{ .Release.Service }}"
+    release: "{{ .Release.Name }}"
+
 spec:
   type: {{ .Values.service.type }}
   selector:
@@ -17,4 +15,4 @@ spec:
     release: {{ .Release.Name | quote }}
   ports:
     - port: postgres
-      targetPort: {{ .Values.internalPort }}
+      targetPort: {{ .Values.service.port }}
