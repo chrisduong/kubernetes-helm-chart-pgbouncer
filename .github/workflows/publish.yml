@@ -18,7 +18,7 @@ jobs:
           # curl -O https://get.helm.sh/helm-v2.13.1-linux-amd64.tar.gz
           # tar -xzf helm-v2.13.1-linux-amd64.tar.gz -C /usr/local/bin --strip-components=1 linux-amd64/helm
           helm init --client-only
-          helm version
+          helm version --client
       - name: Test
         run: helm lint pgbouncer
       - name: Package the chart
