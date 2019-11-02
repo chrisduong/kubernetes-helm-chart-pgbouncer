@@ -14,5 +14,6 @@ spec:
     app: {{ template "pgbouncer.fullname" . }}
     release: {{ .Release.Name | quote }}
   ports:
-    - port: postgres
+    - name: postgres
+      port: 5432
       targetPort: {{ .Values.service.port }}
