@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    tags:
+      - "v*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Install helm
+        run: |
+          curl -O https://get.helm.sh/helm-v2.13.1-linux-amd64.tar.gz
+          tar -xzf helm-v2.13.1-linux-amd64.tar.gz linux-amd64/helm -C /usr/local/bin
+      - name: Package the chart
+        run: |
+          export VERSION=`sed -n -e 's/^version: //p' pgbouncer/Chart.yaml`
+          helm package --app-version=$VERSION pgbouncer
+      - name: Upload the chart
+        run: curl -u$USER:$PASSWORD -T pgbouncer-${VERSION}.tgz "https://alfred.jfrog.io/alfred/charts/pgbouncer-${VERSION}.tgz"
