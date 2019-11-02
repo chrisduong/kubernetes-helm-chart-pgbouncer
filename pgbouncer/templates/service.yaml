@@ -15,5 +15,5 @@ spec:
     release: {{ .Release.Name | quote }}
   ports:
     - name: postgres
-      port: 5432
-      targetPort: {{ .Values.service.port }}
+      port: {{ .Values.service.port }}
+      targetPort: 5432
