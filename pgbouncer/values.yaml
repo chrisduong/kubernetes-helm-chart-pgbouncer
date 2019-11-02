@@ -7,8 +7,8 @@ budget:
   minAvailable: 0
 
 image:
-  repository: cradlepoint/pgbouncer
-  tag: latest
+  repository: chrisduong/pgbouncer
+  tag: 1.8.1
   pullPolicy: Always
 
 databases: {}
