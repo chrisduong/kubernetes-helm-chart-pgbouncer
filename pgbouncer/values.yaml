@@ -48,6 +48,7 @@ global:
 service:
   type: ClusterIP
   port: 5432
+  annotations: {}
 
 ingress:
   enabled: false
