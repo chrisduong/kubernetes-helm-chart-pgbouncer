@@ -15,8 +15,6 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install helm
         run: |
-          # curl -O https://get.helm.sh/helm-v2.13.1-linux-amd64.tar.gz
-          # tar -xzf helm-v2.13.1-linux-amd64.tar.gz -C /usr/local/bin --strip-components=1 linux-amd64/helm
           helm init --client-only
           helm version --client
       - name: Test

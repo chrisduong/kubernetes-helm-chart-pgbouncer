@@ -1,3 +1,5 @@
-description: PgBouncer chart
+apiVersion: v1
 name: pgbouncer
+description: PgBouncer chart
 version: 1.0.3
+appVersion: 1.8.1
