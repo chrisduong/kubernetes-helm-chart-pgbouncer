@@ -16,7 +16,8 @@ jobs:
       - name: Install helm
         run: |
           curl -O https://get.helm.sh/helm-v2.13.1-linux-amd64.tar.gz
-          tar -xzf helm-v2.13.1-linux-amd64.tar.gz linux-amd64/helm -C /usr/local/bin
+          tar -xzf helm-v2.13.1-linux-amd64.tar.gz -C /usr/local/bin --strip-components=1 linux-amd64/helm
+          helm init --client-only
       - name: Package the chart
         run: |
           export VERSION=`sed -n -e 's/^version: //p' pgbouncer/Chart.yaml`
