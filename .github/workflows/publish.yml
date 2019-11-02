@@ -24,6 +24,7 @@ jobs:
       - name: Upload the chart
         run: |
           VERSION=`sed -n -e 's/^version: //p' pgbouncer/Chart.yaml`
+          echo "curl -u${USER}:${PASSWORD} -T pgbouncer-${VERSION}.tgz \"https://alfred.jfrog.io/alfred/charts/pgbouncer-${VERSION}.tgz\""
           curl -u"${USER}":"${PASSWORD}" -T pgbouncer-${VERSION}.tgz "https://alfred.jfrog.io/alfred/charts/pgbouncer-${VERSION}.tgz"
           # TODO: parse JSON return to know the result.
         # $HELM_REPO_USERNAME $HELM_REPO_PASSWORD
