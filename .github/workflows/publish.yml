@@ -15,12 +15,17 @@ jobs:
       - uses: actions/checkout@v1
       - name: Install helm
         run: |
-          curl -O https://get.helm.sh/helm-v2.13.1-linux-amd64.tar.gz
-          tar -xzf helm-v2.13.1-linux-amd64.tar.gz -C /usr/local/bin --strip-components=1 linux-amd64/helm
+          # curl -O https://get.helm.sh/helm-v2.13.1-linux-amd64.tar.gz
+          # tar -xzf helm-v2.13.1-linux-amd64.tar.gz -C /usr/local/bin --strip-components=1 linux-amd64/helm
           helm init --client-only
+          helm version
+      - name: Test
+        run: helm lint pgbouncer
       - name: Package the chart
         run: |
-          export VERSION=`sed -n -e 's/^version: //p' pgbouncer/Chart.yaml`
-          helm package --app-version=$VERSION pgbouncer
+          # export VERSION=`sed -n -e 's/^version: //p' pgbouncer/Chart.yaml`
+          helm package pgbouncer
       - name: Upload the chart
-        run: curl -u$USER:$PASSWORD -T pgbouncer-${VERSION}.tgz "https://alfred.jfrog.io/alfred/charts/pgbouncer-${VERSION}.tgz"
+        # run: curl -u$USER:$PASSWORD -T pgbouncer-${VERSION}.tgz "https://alfred.jfrog.io/alfred/charts/pgbouncer-${VERSION}.tgz"
+        # $HELM_REPO_PASSWORD
+        run: helm push . https://alfred.jfrog.io/alfred/charts
