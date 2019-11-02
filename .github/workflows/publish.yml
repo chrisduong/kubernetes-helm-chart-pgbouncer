@@ -21,9 +21,10 @@ jobs:
         run: helm lint pgbouncer
       - name: Package the chart
         run: |
-          # export VERSION=`sed -n -e 's/^version: //p' pgbouncer/Chart.yaml`
+          export VERSION=`sed -n -e 's/^version: //p' pgbouncer/Chart.yaml`
           helm package pgbouncer
       - name: Upload the chart
-        # run: curl -u$USER:$PASSWORD -T pgbouncer-${VERSION}.tgz "https://alfred.jfrog.io/alfred/charts/pgbouncer-${VERSION}.tgz"
-        # $HELM_REPO_PASSWORD
-        run: helm push . https://alfred.jfrog.io/alfred/charts
+        run: curl -u$USER:$PASSWORD -T pgbouncer-${VERSION}.tgz "https://alfred.jfrog.io/alfred/charts/pgbouncer-${VERSION}.tgz"
+        # $HELM_REPO_USERNAME $HELM_REPO_PASSWORD
+        # Chartmeseum is not support in JFrog
+        # run: helm push . https://alfred.jfrog.io/alfred/charts
