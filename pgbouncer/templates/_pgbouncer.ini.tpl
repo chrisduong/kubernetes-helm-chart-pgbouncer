@@ -45,7 +45,7 @@ unix_socket_dir = var/run/postgresql
 
 ;;; Authentication settings
 
-auth_type = plain
+auth_type = md5
 ;auth_file = /8.0/main/global/pg_auth
 auth_file = /etc/pgbouncer/userlist.txt
 ;auth_hba_file =
