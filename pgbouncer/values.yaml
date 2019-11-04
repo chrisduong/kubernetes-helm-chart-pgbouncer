@@ -48,6 +48,8 @@ global:
 service:
   type: ClusterIP
   port: 5432
+  loadBalancerSourceRanges: []
+  externalTrafficPolicy: ""
   annotations: {}
 
 ingress:
