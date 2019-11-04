@@ -27,10 +27,14 @@ listen_port = 5432
 unix_socket_dir = var/run/postgresql
 ;unix_socket_mode = 0777
 ;unix_socket_group =
-;client_tls_sslmode = disable
-;client_tls_ca_file = <system default>
-;client_tls_key_file =
-;client_tls_cert_file =
+
+{{- if .Values.client_tls_sslmode.enabled }}
+client_tls_sslmode = require
+client_tls_ca_file = /etc/pgbouncer/tls/cert
+client_tls_key_file = /etc/pgbouncer/tls/key
+client_tls_cert_file = /etc/pgbouncer/tls/cert
+{{- end }}
+
 ;client_tls_ciphers = fast
 ;client_tls_protocols = all
 ;client_tls_dheparams = auto

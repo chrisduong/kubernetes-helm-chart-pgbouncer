@@ -45,6 +45,8 @@ global:
   # optionally use namespace as dbname
   namespacedDatabases: false
 
+resources: {}
+
 service:
   type: ClusterIP
   port: 5432
@@ -65,3 +67,11 @@ ingress:
   #  - secretName: chart-example-tls
   #    hosts:
   #      - chart-example.local
+
+client_tls_sslmode:
+  enabled: false
+## Base64-encoded PEM values for server's CA certificate(s), certificate and private key
+# tlsFiles:
+#     ca:
+#     cert:
+#     key:
