@@ -45,14 +45,19 @@ spec:
           ports:
             - name: pgbouncer
               containerPort: {{ .Values.internalPort }}
-          readinessProbe:
+          livenessProbe:
             tcpSocket:
               port: {{ .Values.internalPort }}
+            periodSeconds: 60
           lifecycle:
             preStop:
               exec:
-                # https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/
-                command: ["/bin/sh","-c","sleep 5"]
+                # Allow existing queries clients to complete within 120 seconds
+                command: ["/bin/sh", "-c", "killall -INT pgbouncer && sleep 120"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['all']
           volumeMounts:
             - name: secret
               subPath: userlist.txt
