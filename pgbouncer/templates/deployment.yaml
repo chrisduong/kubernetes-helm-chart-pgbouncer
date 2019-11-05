@@ -24,9 +24,6 @@ spec:
       labels:
         app: {{ template "pgbouncer.fullname" . }}
         release: {{ .Release.Name }}
-      annotations:
-        checksum/ini: {{ include "pgbouncer.ini.1.0.0" . | sha256sum }}
-        checksum/users: {{ include "userlist.txt.1.0.0" . | sha256sum }}
     spec:
       {{- if .Values.imagePullSecretName }}
       imagePullSecrets:
