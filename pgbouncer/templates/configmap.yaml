@@ -1,14 +1,14 @@
-{{- if .Values.client_tls_sslmode.enabled -}}
-kind: Secret
 apiVersion: v1
+kind: ConfigMap
 metadata:
-  name: {{ template "pgbouncer.fullname" . }}-client
+  name: {{ template "pgbouncer.fullname" . }}
   labels:
     app: {{ template "pgbouncer.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
     release: "{{ .Release.Name }}"
     heritage: "{{ .Release.Service }}"
-type: Opaque
 data:
-{{ toYaml .Values.tlsFiles | indent 2 }}
-{{- end -}}
+  {{- range $k, $v := $opts.config }}
+  {{ quote $k }}: {{ $v | quote }}
+  {{- end }}
+{{- end }}

@@ -4,10 +4,10 @@ kind: PodDisruptionBudget
 metadata:
   name: "{{ template "pgbouncer.fullname" . }}"
   labels:
-    app: {{ template "pgbouncer.fullname" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
+    app: {{ template "pgbouncer.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
 spec:
   selector:
     matchLabels:
