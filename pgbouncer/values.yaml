@@ -1,7 +1,7 @@
 # Deployment values for pgbouncer
 replicaCount: 1
 internalPort: 5432
-antiAffinity: soft
+
 
 budget:
   minAvailable: 0
