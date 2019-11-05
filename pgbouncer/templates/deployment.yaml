@@ -28,26 +28,6 @@ spec:
         checksum/ini: {{ include "pgbouncer.ini.1.0.0" . | sha256sum }}
         checksum/users: {{ include "userlist.txt.1.0.0" . | sha256sum }}
     spec:
-      affinity:
-        {{- if eq .Values.antiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  {{ template "pgbouncer.appLabel" . }}
-                  release: {{ .Release.Name }}
-        {{- else if eq .Values.antiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchLabels:
-                    {{ template "pgbouncer.appLabel" . }}
-                    release: {{ .Release.Name }}
-        {{- end }}
       {{- if .Values.imagePullSecretName }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecretName }}
