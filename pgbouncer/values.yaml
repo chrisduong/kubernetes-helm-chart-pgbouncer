@@ -54,20 +54,6 @@ service:
   externalTrafficPolicy: ""
   annotations: {}
 
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  labels: {}
-  path: /
-  hosts:
-    - chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
-
 client_tls_sslmode:
   enabled: false
 ## Base64-encoded PEM values for server's CA certificate(s), certificate and private key
