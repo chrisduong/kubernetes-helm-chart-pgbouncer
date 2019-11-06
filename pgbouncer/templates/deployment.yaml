@@ -28,13 +28,16 @@ spec:
         - name: {{ .Values.imagePullSecretName }}
       {{- end }}
       volumes:
-        - name: secret
+        - name: config
+          configMap:
+            name: {{ template "pgbouncer.fullname" . }}
+        - name: users
           secret:
-            secretName: {{ template "pgbouncer.fullname" . }}-secret
+            secretName: {{ template "pgbouncer.fullname" . }}-users-secret
         {{- if .Values.client_tls_sslmode.enabled }}
-        - name: tls
+        - name: client-tls
           secret:
-            secretName: {{ template "pgbouncer.fullname" . }}-client
+            secretName: {{ template "pgbouncer.fullname" . }}-client-tls
         {{- end }}
       containers:
         - name: pgbouncer
@@ -57,16 +60,16 @@ spec:
             capabilities:
               drop: ['all']
           volumeMounts:
-            - name: secret
+            - name: users
               subPath: userlist.txt
               mountPath: /etc/pgbouncer/userlist.txt
               readOnly: true
-            - name: secret
+            - name: config
               subPath: pgbouncer.ini
               mountPath: /etc/pgbouncer/pgbouncer.ini
-              readOnly: true
+              # readOnly: true
             {{- if .Values.client_tls_sslmode.enabled }}
-            - name: tls
+            - name: client-tls
               mountPath: /etc/pgbouncer/tls
             {{- end }}
           resources:
