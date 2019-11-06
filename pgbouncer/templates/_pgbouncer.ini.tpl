@@ -9,7 +9,7 @@
 {{- if $root.Values.global.namespacedDatabases }}
 {{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.user }}user={{ $v.user }}{{end}} dbname={{ $root.Release.Namespace | replace "-" "_"}}_{{ $v.dbname }}
 {{- else }}
-{{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.user }}user={{ $v.user }}{{end}} dbname={{ $v.dbname }}
+{{ $k }} = host={{ $v.host }} port={{ $v.port }} {{ if $v.user }}user={{ $v.user }}{{end}} {{ if $v.dbname }}dbname={{ $v.dbname }}{{end}}
 {{- end }}
 
 {{- end }}
@@ -24,7 +24,7 @@
 ;;; Where to wait for clients
 listen_addr = 0.0.0.0
 listen_port = 5432
-unix_socket_dir = var/run/postgresql
+;unix_socket_dir = /tmp
 ;unix_socket_mode = 0777
 ;unix_socket_group =
 

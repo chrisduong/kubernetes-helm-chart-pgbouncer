@@ -1,14 +1,14 @@
 # Deployment values for pgbouncer
 replicaCount: 1
 internalPort: 5432
-antiAffinity: soft
+
 
 budget:
   minAvailable: 0
 
 image:
   repository: chrisduong/pgbouncer
-  tag: 1.8.1
+  tag: 1.11
   pullPolicy: Always
 
 databases: {}
@@ -53,20 +53,6 @@ service:
   loadBalancerSourceRanges: []
   externalTrafficPolicy: ""
   annotations: {}
-
-ingress:
-  enabled: false
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  labels: {}
-  path: /
-  hosts:
-    - chart-example.local
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
 
 client_tls_sslmode:
   enabled: false

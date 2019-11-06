@@ -3,13 +3,11 @@ kind: Deployment
 metadata:
   name: {{ template "pgbouncer.fullname" . }}
   labels:
-    {{ template "pgbouncer.appLabel" . }}
-    chart: {{ .Chart.Name }}-{{ .Chart.Version | replace "+" "_" }}
-    heritage: {{ .Release.Service }}
-    release: {{ .Release.Name }}
-    {{- if .Values.labels }}
-    {{- toYaml .Values.labels | nindent 4}}
-    {{- end }}
+    app: {{ template "pgbouncer.name" . }}
+    chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
+    release: "{{ .Release.Name }}"
+    heritage: "{{ .Release.Service }}"
+
 spec:
   strategy:
     rollingUpdate:
@@ -24,42 +22,22 @@ spec:
       labels:
         app: {{ template "pgbouncer.fullname" . }}
         release: {{ .Release.Name }}
-      annotations:
-        checksum/ini: {{ include "pgbouncer.ini.1.0.0" . | sha256sum }}
-        checksum/users: {{ include "userlist.txt.1.0.0" . | sha256sum }}
     spec:
-      affinity:
-        {{- if eq .Values.antiAffinity "hard" }}
-        podAntiAffinity:
-          requiredDuringSchedulingIgnoredDuringExecution:
-            - topologyKey: kubernetes.io/hostname
-              labelSelector:
-                matchLabels:
-                  {{ template "pgbouncer.appLabel" . }}
-                  release: {{ .Release.Name }}
-        {{- else if eq .Values.antiAffinity "soft" }}
-        podAntiAffinity:
-          preferredDuringSchedulingIgnoredDuringExecution:
-            - weight: 1
-              podAffinityTerm:
-                topologyKey: kubernetes.io/hostname
-                labelSelector:
-                  matchLabels:
-                    {{ template "pgbouncer.appLabel" . }}
-                    release: {{ .Release.Name }}
-        {{- end }}
       {{- if .Values.imagePullSecretName }}
       imagePullSecrets:
         - name: {{ .Values.imagePullSecretName }}
       {{- end }}
       volumes:
-        - name: secret
+        - name: config
+          configMap:
+            name: {{ template "pgbouncer.fullname" . }}
+        - name: users
           secret:
-            secretName: {{ template "pgbouncer.fullname" . }}-secret
+            secretName: {{ template "pgbouncer.fullname" . }}-users-secret
         {{- if .Values.client_tls_sslmode.enabled }}
-        - name: tls
+        - name: client-tls
           secret:
-            secretName: {{ template "pgbouncer.fullname" . }}-client
+            secretName: {{ template "pgbouncer.fullname" . }}-client-tls
         {{- end }}
       containers:
         - name: pgbouncer
@@ -68,25 +46,30 @@ spec:
           ports:
             - name: pgbouncer
               containerPort: {{ .Values.internalPort }}
-          readinessProbe:
+          livenessProbe:
             tcpSocket:
               port: {{ .Values.internalPort }}
+            periodSeconds: 60
           lifecycle:
             preStop:
               exec:
-                # https://freecontent.manning.com/handling-client-requests-properly-with-kubernetes/
-                command: ["/bin/sh","-c","sleep 5"]
+                # Allow existing queries clients to complete within 120 seconds
+                command: ["/bin/sh", "-c", "killall -INT pgbouncer && sleep 120"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop: ['all']
           volumeMounts:
-            - name: secret
+            - name: users
               subPath: userlist.txt
               mountPath: /etc/pgbouncer/userlist.txt
               readOnly: true
-            - name: secret
+            - name: config
               subPath: pgbouncer.ini
               mountPath: /etc/pgbouncer/pgbouncer.ini
-              readOnly: true
+              # readOnly: true
             {{- if .Values.client_tls_sslmode.enabled }}
-            - name: tls
+            - name: client-tls
               mountPath: /etc/pgbouncer/tls
             {{- end }}
           resources:

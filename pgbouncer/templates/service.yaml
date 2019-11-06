@@ -7,11 +7,10 @@ metadata:
     {{ $key }}: {{ $value | quote }}
   {{- end }}
   labels:
-    {{ template "pgbouncer.appLabel" . }}
+    app: {{ template "pgbouncer.name" . }}
     chart: "{{ .Chart.Name }}-{{ .Chart.Version }}"
-    heritage: "{{ .Release.Service }}"
     release: "{{ .Release.Name }}"
-
+    heritage: "{{ .Release.Service }}"
 spec:
   type: {{ .Values.service.type }}
 {{- if .Values.service.loadBalancerSourceRanges }}
@@ -23,7 +22,7 @@ spec:
 {{- end }}
   selector:
     app: {{ template "pgbouncer.fullname" . }}
-    release: {{ .Release.Name | quote }}
+    release: {{ .Release.Name }}
   ports:
     - name: postgres
       port: {{ .Values.service.port }}
