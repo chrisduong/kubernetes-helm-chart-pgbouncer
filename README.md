@@ -7,6 +7,9 @@ This project is a [Helm](https://helm.sh/) chart implementation for [PgBouncer](
 ### Configuration
 Create a values.override.yaml (or similar) to add your *databases* and *users* settings.
 
+`https://github.com/pgbouncer/pgbouncer.github.io/blob/master/config.md`
+
+
 ```yaml
 # values.override.yaml example
 replicaCount: 1
